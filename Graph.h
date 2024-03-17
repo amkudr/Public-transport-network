@@ -10,14 +10,14 @@ using namespace std;
 
 class Graph {
 private:
-    map<string,shared_ptr<Station>> stations;
-    array<shared_ptr<Transport>, 4> transport;
+    map<string,St_ptr> stations;
+    array<Tr_ptr , 4> transport;
 public:
     Graph();
     void addStation(string name);
-    void addEdge(string from, string to, int type, int StopTime, int duration);
+    void addEdge(const string& from, const string& to, int type, int duration);
     void printGraph();
-//    void bfdPrint(const string& startName, bool reverse = false);
+    void bfdPrint(const string& startName, bool reverse = false);
 //    map<string, int> dijukstra(const string &start, int type);
 //    map<string, int> dijukstra2(const string &start);
 

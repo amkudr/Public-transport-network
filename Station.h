@@ -11,18 +11,23 @@
 
 
 using namespace std;
-class Edge;
+
+class Station;
+
+typedef shared_ptr<Station> St_ptr;
+typedef shared_ptr<Transport> Tr_ptr;
+
 class Station {
 private:
     string name;
-    int changeTime = 3;
-//    vector<Edge> edges;
-    map<shared_ptr<Station>, array<pair<shared_ptr<Transport>, int>, 4>> connections; // 0 - bus, 1 - tram, 2 - sprinter, 3 - rail
-    map<shared_ptr<Station>, array<pair<shared_ptr<Transport>, int>, 4>> connectionsRev; // Reversion connections
+
+    map<St_ptr, array<Tr_ptr, 4>> connections; // 0 - bus, 1 - tram, 2 - sprinter, 3 - rail
+    map<St_ptr, array<Tr_ptr, 4>> connectionsRev; // Reversion connections
+
 public:
     explicit Station(string name);
-    void addConnection(const shared_ptr<Station> &station, shared_ptr<Transport> transport, int duration);
-    void addRevConnection(const shared_ptr<Station> &station, shared_ptr<Transport> transport, int duration);
+
+    void addConnection(const St_ptr &station, const Tr_ptr &transport, bool rev = false);
 
     string getName() {
         return name;
@@ -30,13 +35,11 @@ public:
 
     stringstream printStation();
 
-    map<shared_ptr<Station>, array<pair<shared_ptr<Transport>, int>, 4>> getConnections() { return connections; }
-    map<shared_ptr<Station>, array<pair<shared_ptr<Transport>, int>, 4>> getRevConnections() { return connectionsRev; }
+    map<St_ptr, array<Tr_ptr, 4>> getConnections() { return connections; }
 
+    map<St_ptr, array<Tr_ptr, 4>> getRevConnections() { return connectionsRev; }
 
-
-
-
+    static int changeTime;
 };
 
 

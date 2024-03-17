@@ -6,8 +6,7 @@
 using namespace std;
 
 Graph::Graph() {
-    stations = map<string,shared_ptr<Station>>();
-    map<string, shared_ptr<Station>>();
+    stations = map<string,St_ptr>();
 }
 
 void Graph::addStation(string name) {
@@ -16,19 +15,19 @@ void Graph::addStation(string name) {
         std::cout << "Station already exists" << std::endl;
         return;
     }
-    shared_ptr<Station> sharedPtr = make_shared<Station>(name);
-    stations.insert({name, sharedPtr});
+    St_ptr sharedPtr = make_shared<Station>(name);
+    stations.insert({std::move(name), sharedPtr});
     std::cout << "Station added" << std::endl;
 }
 
-void Graph::addEdge(string from, string to, int type, int StopTime, int duration) {
+void Graph::addEdge(const string& from, const string& to, int type, int duration) {
     addStation(from);
     addStation(to);
     auto it = stations.find(from);
     auto it2 = stations.find(to);
-    std::shared_ptr<Transport> sharedPtr = std::make_shared<Transport>(StopTime, type);
-    it->second->addConnection(it2->second, sharedPtr, duration);
-    it2->second->addRevConnection(it->second, sharedPtr, duration);
+    Tr_ptr sharedPtr = std::make_shared<Transport>(type, duration);
+    it->second->addConnection(it2->second, sharedPtr);
+    it2->second->addConnection(it->second, sharedPtr, true);
 }
 
 void Graph::printGraph() {
@@ -38,33 +37,33 @@ void Graph::printGraph() {
 
 }
 
-//void Graph::bfdPrint(const string& startName, bool reverse) {
-//    auto it = stations.find(startName);
-//    if (it == stations.end()) {
-//        std::cout << "Station not found" << std::endl;
-//        return;
-//    }
-//    shared_ptr<Station> start = it->second;
-//    std::set<shared_ptr<Station>> visited;
-//    std::queue<shared_ptr<Station>> queue;
-//    queue.push(start);
-//    visited.insert(start);
-//    while (!queue.empty()) {
-//        shared_ptr<Station> station = queue.front();
-//        queue.pop();
-//        std::cout << station->getName() << "\t";
-//        map<shared_ptr<Station>, array<pair<shared_ptr<Transport>, int>, 4>> connections;
-//        if(reverse){
-//             connections = station->getRevConnections();
-//        } else connections = station->getConnections();
-//        for (const auto &connection: connections) {
-//            if (visited.find(connection.first) == visited.end()) {
-//                queue.push(connection.first);
-//                visited.insert(connection.first);
-//            }
-//        }
-//    }
-//}
+void Graph::bfdPrint(const string& startName, bool reverse) {
+    auto it = stations.find(startName);
+    if (it == stations.end()) {
+        std::cout << "Station not found" << std::endl;
+        return;
+    }
+    St_ptr start = it->second;
+    std::set<St_ptr> visited;
+    std::queue<St_ptr> queue;
+    queue.push(start);
+    visited.insert(start);
+    while (!queue.empty()) {
+        St_ptr station = queue.front();
+        queue.pop();
+        std::cout << station->getName() << "\t";
+        map<St_ptr, array<Tr_ptr, 4>> connections;
+        if(reverse){
+             connections = station->getRevConnections();
+        } else connections = station->getConnections();
+        for (const auto &connection: connections) {
+            if (visited.find(connection.first) == visited.end()) {
+                queue.push(connection.first);
+                visited.insert(connection.first);
+            }
+        }
+    }
+}
 
 //typedef pair<int, string> iPair;
 //map<string, int> Graph::dijukstra(const string &start, int type) {

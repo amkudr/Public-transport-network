@@ -9,18 +9,22 @@ using namespace std;
 class Transport {
 private:
     int type;
-    int StopTime;
+    int dur;
 public:
-    Transport(int StopTime, int type) : StopTime(StopTime), type(type){};
+    static int stopTime;
+
+    Transport(int type, int dur) : type(type), dur(dur) {};
     bool operator <(const Transport &other) const;
-    int getType() {
+    int getDuration() const{
+        return dur;
+    }
+
+    int getType() const {
         return type;
     }
-    int getStopTime() {
-        return StopTime;
+    static int getStopTime() {
+        return stopTime;
     }
-
-
 };
 
 
