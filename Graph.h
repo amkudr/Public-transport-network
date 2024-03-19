@@ -19,7 +19,7 @@ public:
     void printGraph();
     void bfdPrint(const string& startName, bool reverse = false);
     map<string, int> dijkstra(const string &start, int type);
-    map<string, int> dijukstra2(const string &start);
+    map<string, int> dijkstra2(const string &start);
 
 
 };

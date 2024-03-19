@@ -2,6 +2,7 @@
 #include "Graph.h"
 #include <sstream>
 #include <queue>
+#include <algorithm>
 
 using namespace std;
 
@@ -106,83 +107,75 @@ map<string, int> Graph::dijkstra(const string &start, int type) {
     return distMap;
 }
 
-map<string, int> Graph::dijukstra2(const string &start) {
+
+typedef tuple<int, string, int> iTriple; //Duration, Vertex Name, Type of transport
+map<string, int> Graph::dijkstra2(const string &start) {
+    auto it = stations.find(start);
     //Check if start inside and -1<type<5
-    if (stations.find(start) == stations.end()) {
+    if (it == stations.end()) {
         return {};
     }
-    map<string, int> distMap; //keep distance for every vertex from vertex start
-    priority_queue<iPair, vector<iPair>, greater<iPair>> priorityQueue; //queue to keep vertexes by algorithm
-    priorityQueue.emplace(0, start);
-    distMap[start] = 0;
+    array<map<string, int>, 2> arrOfDistMap;
+    priority_queue<iTriple, vector<iTriple>, greater<iTriple>> priorityQueue; //queue to keep vertexes by algorithm
+    auto start_connections = it->second->getConnections();
+//    priorityQueue.emplace(0, start, 0);
+    for (int i = 0; i < 2; i++) {
+        arrOfDistMap[i][start] = 0;
+        priorityQueue.emplace(0, start, i);
+
+    }
+
     while (!priorityQueue.empty()) {
-        string currStName = priorityQueue.top().second;
+
+        string currStName = std::get<1>(priorityQueue.top());
+        int type = std::get<2>(priorityQueue.top());
         priorityQueue.pop();
 
 
-        //check if current distance value bigger than distance that already exist to improve algorithm
-        if (distMap[currStName] < priorityQueue.top().first) {
-            continue;
-        }
+//        //check if current distance value bigger than distance that already exist to improve algorithm
+//        if(arrOfDistMap[type][currStName]< get<0>(priorityQueue.top())) continue;
 
         auto currSt_ptr = stations[currStName];
         for (auto &connSt_ptr: currSt_ptr->getConnections()) {
             string connStName = connSt_ptr.first->getName();
-            Tr_ptr tr_ptr = connSt_ptr.second[type];
-            if (tr_ptr == nullptr) {
-                continue;
-            }
-            int weight = tr_ptr->getDuration();
-            if (currStName != start)
-                weight += tr_ptr->getStopTime(); //Check if it is start vertex, we don't need to add stop time
+            for (int i = 0; i < 2; i++) {
+                Tr_ptr tr_ptr = connSt_ptr.second[i];
+                if (tr_ptr == nullptr) {
+                    continue;
+                }
+                int weight = tr_ptr->getDuration();
+                if (currStName != start) {
+                    if (i != type) weight += currSt_ptr->getChangeTime(); //Add transit time
+                    else weight += tr_ptr->getStopTime();
+                } else {
+                    if (i != type) continue;
+                }
 
-            if (distMap.find(connStName) == distMap.end() || distMap[connStName] > distMap[currStName] + weight) {
-                distMap[connStName] = distMap[currStName] + weight;
-                priorityQueue.emplace(distMap[connStName], connStName);
+                if (arrOfDistMap[i].find(connStName) == arrOfDistMap[i].end() ||
+                    arrOfDistMap[i][connStName] > arrOfDistMap[type][currStName] + weight) {
+                    arrOfDistMap[i][connStName] = arrOfDistMap[type][currStName] + weight;
+                    priorityQueue.emplace(arrOfDistMap[i][connStName], connStName, i);
+                }
             }
         }
     }
+    map<string, int> distMap;
+
+
+    for (const auto &pair: arrOfDistMap[0]) {
+        string key = pair.first;
+        int value1 = pair.second;
+        int value2 = arrOfDistMap[1][key];
+//        int value3 = arrOfDistMap[2][key];
+//        int value4 = arrOfDistMap[3][key];
+
+//        int max_value = std::max({value1, value2, value3, value4});
+        int min_value = std::min({value1, value2});
+
+
+        distMap[key] = min_value;
+    }
     return distMap;
+
 }
 
-//map<string, int> Graph::dijukstra2(const string &start) {
-//    //Check if start inside and -1<type<5
-//    map<string, int> distMap;
-//    priority_queue<iPair, vector<iPair>, greater<iPair>> priorityQueue;
-//    int type = -1;
-//    priorityQueue.emplace(0, start);
-//    distMap[start] = 0;
-//    while (!priorityQueue.empty()){
-//        string currStName = priorityQueue.top().second;
-//        priorityQueue.pop();
-//        auto currSt = stations[currStName];
-//        for(auto & connSt: currSt->getConnections()){
-//            string connStName = connSt.first->getName();
-//            array<shared_ptr<Transport>, 4> connTrArray = connSt.second;
-//            int weight = -1;
-//            if(type == -1)
-//                for(const auto& transport: connTrArray){
-//                    if (transport == nullptr) continue;
-//                    if (weight == -1 || weight > transport->getStopTime()) {
-//                        weight = transport->getStopTime();
-//                        type = transport->getType();
-//                    }
-//            }
-//            else {
-//                for(const auto& transport: connTrArray){
-//                    if (transport == nullptr) continue;
-//                    int passWeight = (transport->getType() == type) ? transport->getStopTime():transport->getStopTime() +
-//                    if (weight == -1 || weight > transport->getStopTime()) {
-//                        weight = transport->getStopTime();
-//                        type = transport->getType();
-//                    }
-//
-//            }
-//            if (distMap.find(connStName) == distMap.end() || distMap[connStName] > distMap[currStName] + weight){
-//                distMap[connStName] = distMap[currStName] + weight;
-//                priorityQueue.emplace(distMap[connStName], connStName);
-//            }
-//        }
-//    }
-//    return distMap;
-//}
