@@ -25,6 +25,8 @@ private:
     map<St_ptr, array<Tr_ptr, 4>> connectionsRev; // Reversion connections
 
 public:
+    static int changeTime;
+
     explicit Station(string name);
 
     void addConnection(const St_ptr &station, const Tr_ptr &transport, bool rev = false);
@@ -39,7 +41,10 @@ public:
 
     map<St_ptr, array<Tr_ptr, 4>> getRevConnections() { return connectionsRev; }
 
-    static int changeTime;
+    static int getChangeTime(){
+        return changeTime;
+    }
+
 };
 
 
