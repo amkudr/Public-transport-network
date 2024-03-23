@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int Station::changeTime = 20;
+int Station::changeTime = 2;
 
 Station::Station(string name) {
     this->name = std::move(name);

@@ -81,7 +81,6 @@ map<string, int> Graph::dijkstra(const string &start, int type) {
         string currStName = priorityQueue.top().second;
         priorityQueue.pop();
 
-
         //check if current distance value bigger than distance that already exist to improve algorithm
         if (distMap[currStName] < priorityQueue.top().first) {
             continue;
@@ -109,20 +108,27 @@ map<string, int> Graph::dijkstra(const string &start, int type) {
 
 
 typedef tuple<int, string, int> iTriple; //Duration, Vertex Name, Type of transport
-map<string, int> Graph::dijkstra2(const string &start) {
+array<map<string, int>, 4> Graph::dijkstraMulti(const string &start, const vector<pair<int, int>> &startVector) {
     auto it = stations.find(start);
-    //Check if start inside and -1<type<5
-    if (it == stations.end()) {
+    if (it == stations.end()) {    //Check if start inside
+
         return {};
     }
-    array<map<string, int>, 2> arrOfDistMap;
+    array<map<string, int>, 4> arrOfDistMap; //Array of all 4 type of the transport, map<NameVertex, distance>
     priority_queue<iTriple, vector<iTriple>, greater<iTriple>> priorityQueue; //queue to keep vertexes by algorithm
-    auto start_connections = it->second->getConnections();
-//    priorityQueue.emplace(0, start, 0);
-    for (int i = 0; i < 2; i++) {
-        arrOfDistMap[i][start] = 0;
-        priorityQueue.emplace(0, start, i);
+//    auto start_connections = it->second->getConnections();
+    bool isAdvAlg = !startVector.empty();
+    if (isAdvAlg) { //If algorithm is second part of fromAtoBThrowC function
+        for (auto &p: startVector) {
+            arrOfDistMap[p.first].emplace(start, p.second);
+            priorityQueue.emplace(p.second, start, p.first);
+        }
+    } else { //if we start algorithm from one Vertex
+        for (int i = 0; i < 4; i++) {
+            arrOfDistMap[i][start] = 0;
+            priorityQueue.emplace(0, start, i);
 
+        }
     }
 
     while (!priorityQueue.empty()) {
@@ -131,51 +137,87 @@ map<string, int> Graph::dijkstra2(const string &start) {
         int type = std::get<2>(priorityQueue.top());
         priorityQueue.pop();
 
-
-//        //check if current distance value bigger than distance that already exist to improve algorithm
-//        if(arrOfDistMap[type][currStName]< get<0>(priorityQueue.top())) continue;
-
         auto currSt_ptr = stations[currStName];
-        for (auto &connSt_ptr: currSt_ptr->getConnections()) {
+
+        for (auto &connSt_ptr: currSt_ptr->getConnections()) { //Go through all connections
             string connStName = connSt_ptr.first->getName();
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 4; i++) {
                 Tr_ptr tr_ptr = connSt_ptr.second[i];
-                if (tr_ptr == nullptr) {
+                if (tr_ptr == nullptr) { //If there is no connection by type i
                     continue;
                 }
                 int weight = tr_ptr->getDuration();
-                if (currStName != start) {
+                if (currStName != start || isAdvAlg) { //If not the first vertex or it is advanced algorithm
                     if (i != type) weight += currSt_ptr->getChangeTime(); //Add transit time
-                    else weight += tr_ptr->getStopTime();
+                    else weight += tr_ptr->getStopTime(); //Add stop time
                 } else {
                     if (i != type) continue;
                 }
 
                 if (arrOfDistMap[i].find(connStName) == arrOfDistMap[i].end() ||
-                    arrOfDistMap[i][connStName] > arrOfDistMap[type][currStName] + weight) {
+                    arrOfDistMap[i][connStName] > arrOfDistMap[type][currStName] + weight) { //Check if new way is shorter
                     arrOfDistMap[i][connStName] = arrOfDistMap[type][currStName] + weight;
                     priorityQueue.emplace(arrOfDistMap[i][connStName], connStName, i);
                 }
             }
         }
     }
-    map<string, int> distMap;
+    return arrOfDistMap;
+}
 
+int Graph::fromAtoBThrowC(const string &a, const string &b, const string &c) {
+    if (stations.find(a) == stations.end() || stations.find(b) == stations.end() || //Check if stations exist
+        stations.find(c) == stations.end())
+        return -1;
 
-    for (const auto &pair: arrOfDistMap[0]) {
-        string key = pair.first;
-        int value1 = pair.second;
-        int value2 = arrOfDistMap[1][key];
-//        int value3 = arrOfDistMap[2][key];
-//        int value4 = arrOfDistMap[3][key];
-
-//        int max_value = std::max({value1, value2, value3, value4});
-        int min_value = std::min({value1, value2});
-
-
-        distMap[key] = min_value;
+    auto arrOfDistMap = dijkstraMulti(a); //Get all distances from a
+    vector<pair<int, int>> inputVector; //Vector for advanced algorithm
+    int i = 0;
+    for (auto &distMap: arrOfDistMap) { //Get the smallest distance from a to c by combination of transport
+        auto it = distMap.find(c);
+        if (it != distMap.end()) {
+            inputVector.emplace_back(i, it->second);
+            i++;
+        }
     }
-    return distMap;
+    if (inputVector.empty()) return -1; //If there is no connection from a to c
+    arrOfDistMap = dijkstraMulti(c, inputVector); //Get all distances from c to b
+    int minvalue = INT16_MAX;
+    for (auto &distMap: arrOfDistMap) { //Get the smallest value of all type of transport
+        auto it = distMap.find(b);
+        if (it != distMap.end() && it->second < minvalue) {
+            minvalue = it->second;
+        }
+    }
+    return minvalue;
+}
+
+int Graph::fromAtoBSingle(const string &a, const string &b) {
+    if (stations.find(a) == stations.end() || stations.find(b) == stations.end()) //Check if stations exist
+        return -1;
+
+    int minvalue = INT16_MAX;
+    for (int i = 0; i < 4; i++) {
+        auto distMap = dijkstra(a, i);
+        if (distMap.find(b) != distMap.end() && distMap[b] < minvalue) {
+            minvalue = distMap[b];
+        }
+    }
+    return minvalue;
+}
+
+int Graph::fromAtoBMulti(const string &a, const string &b) {
+    if (stations.find(a) == stations.end() || stations.find(b) == stations.end()) //Check if stations exist
+        return -1;
+    auto arrOfDistMap = dijkstraMulti(a);
+
+    int minvalue = INT16_MAX;
+    for (auto distMap: arrOfDistMap) {
+        if (distMap.find(b) != distMap.end() && distMap[b] < minvalue) {
+            minvalue = distMap[b];
+        }
+    }
+    return minvalue;
 
 }
 
