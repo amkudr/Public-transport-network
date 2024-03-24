@@ -8,5 +8,13 @@ add_executable(HW2 main.cpp
         Graph.h
         Station.cpp
         Station.h
-        Transport.cpp
-        Transport.h)
+        Transport/Transport.cpp
+        Transport/Transport.h
+        Transport/Bus.h
+        Transport/Tram.h
+        Transport/Sprinter.h
+        Transport/Rail.h
+        Transport/Bus.cpp
+        Transport/Sprinter.cpp
+        Transport/Tram.cpp
+        Transport/Rail.cpp)

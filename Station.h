@@ -2,7 +2,7 @@
 #define HW2_STATION_H
 
 #include <string>
-#include "Transport.h"
+#include "Transport/Transport.h"
 #include <map>
 #include <vector>
 #include "memory"
@@ -20,7 +20,6 @@ typedef shared_ptr<Transport> Tr_ptr;
 class Station {
 private:
     string name;
-
     map<St_ptr, array<Tr_ptr, 4>> connections; // 0 - bus, 1 - tram, 2 - sprinter, 3 - rail
     map<St_ptr, array<Tr_ptr, 4>> connectionsRev; // Reversion connections
 

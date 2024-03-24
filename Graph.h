@@ -2,6 +2,10 @@
 #define HW2_GRAPH_H
 
 #include "Station.h"
+#include "Transport/Bus.h"
+#include "Transport/Tram.h"
+#include "Transport/Sprinter.h"
+#include "Transport/Rail.h"
 #include <map>
 #include <vector>
 #include <memory>
@@ -10,6 +14,9 @@ using namespace std;
 
 class Graph {
 private:
+
+    array<string,4 > tran_names = {"bus", "tram", "sprinter", "rail"};
+
     map<string, St_ptr> stations;
     array<Tr_ptr, 4> transport;
 
@@ -19,7 +26,7 @@ private:
 
     unique_ptr<array<map<string, int>, 4>> dijkstraMulti(const string &start, const vector<pair<int, int>> &startVector = {});
 public:
-    Graph();
+    explicit Graph(int bus = -1, int tram = -1, int sprinter = -1, int rail = -1);
 
     void addStation(string name);
 

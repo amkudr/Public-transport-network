@@ -1,10 +1,11 @@
 
 #include <sstream>
+#include <iostream>
 #include "Station.h"
 
 using namespace std;
 
-int Station::changeTime = 2;
+int Station::changeTime = 3;
 
 Station::Station(string name) {
     this->name = std::move(name);

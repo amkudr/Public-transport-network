@@ -6,19 +6,23 @@
 
 using namespace std;
 
-Graph::Graph() {
+Graph::Graph(int bus , int tram, int sprinter, int rail) {
     stations = map<string, St_ptr>();
+    if(bus!=-1) Bus::setStopTime(bus);
+    if(tram!=-1) Tram::setStopTime(tram);
+    if(sprinter!=-1) Sprinter::setStopTime(sprinter);
+    if(rail!=-1) Rail::setStopTime(rail);
 }
 
 void Graph::addStation(string name) {
     auto it = stations.find(name);
     if (it != stations.end()) {
-        cout << "Station already exists" << endl;
+//        cout << "Station already exists" << endl;
         return;
     }
     St_ptr sharedPtr = make_shared<Station>(name);
     stations.insert({std::move(name), sharedPtr});
-    cout << "Station added" << endl;
+//    cout << "Station added" << endl;
 }
 
 void Graph::addEdge(const string &from, const string &to, int type, int duration) {
@@ -26,7 +30,20 @@ void Graph::addEdge(const string &from, const string &to, int type, int duration
     addStation(to);
     auto it = stations.find(from);
     auto it2 = stations.find(to);
-    Tr_ptr sharedPtr = make_shared<Transport>(type, duration);
+    Tr_ptr sharedPtr;
+    switch (type) {
+        case 0: sharedPtr = make_shared<Bus>(duration);
+            break;
+        case 1: sharedPtr = make_shared<Tram>( duration);
+            break;
+        case 2: sharedPtr = make_shared<Sprinter>(duration);
+            break;
+        case 3: sharedPtr = make_shared<Rail>(duration);
+            break;
+        default:
+            break;
+
+    }
     it->second->addConnection(it2->second, sharedPtr);
     it2->second->addConnection(it->second, sharedPtr, true);
 }
@@ -53,10 +70,7 @@ unique_ptr<vector<string>> Graph::bfs(const string &startName, bool reverse, int
         St_ptr station = queue.front();
         queue.pop();
         pathVector_ptr->emplace_back(std::move(station->getName()));
-        map<St_ptr, array<Tr_ptr, 4>> connections;
-        if (reverse) {
-            connections = station->getRevConnections();
-        } else connections = station->getConnections();
+        const auto& connections = reverse ? station->getRevConnections() : station->getConnections();
         for (const auto &connection: connections) {
             if (visited.find(connection.first) == visited.end() && connection.second[type] != nullptr) {
                 queue.push(connection.first);
@@ -108,6 +122,9 @@ unique_ptr<map<string, int>> Graph::dijkstra(const string &start, int type) {
             }
         }
     }
+    if (distMap->empty()) {
+        return nullptr; // Return nullptr if arrOfDistMap is empty
+    }
 
     return distMap;
 }
@@ -157,7 +174,7 @@ Graph::dijkstraMulti(const string &start, const vector<pair<int, int>> &startVec
                     if (i != type) weight += currSt_ptr->getChangeTime(); //Add transit time
                     else weight += tr_ptr->getStopTime(); //Add stop time
                 } else {
-                    if (i != type) continue;
+                    if (i != type) continue; //optimization for start vertex
                 }
 
                 if ((*arrOfDistMap)[i].find(connStName) == (*arrOfDistMap)[i].end() ||
@@ -168,6 +185,9 @@ Graph::dijkstraMulti(const string &start, const vector<pair<int, int>> &startVec
                 }
             }
         }
+    }
+    if (arrOfDistMap->empty()) {
+        return nullptr; // Return nullptr if arrOfDistMap is empty
     }
     return arrOfDistMap;
 }
@@ -209,7 +229,7 @@ void Graph::uniExpress(const string &source_node, const string &target_node) {
         return;
 
     for (int i = 0; i < 4; i++) {
-        cout<<"Type "<<i<<": ";
+        cout<<tran_names[i]<<": ";
         auto distMap = dijkstra(source_node, i);
         auto it = distMap->find(target_node);
         if (it != distMap->end()) {
@@ -245,7 +265,7 @@ void Graph::outborn(const string &source_node, bool isInborn) {
         return; //CHANGE!!!!!!!!!!!!!!!
     for(int i = 0; i < 4; i++){
         auto conVector_ptr = bfs(source_node, isInborn, i);
-        cout<<"type "<<i<<": ";
+        cout<<tran_names[i]<<": ";
         if(conVector_ptr->empty()){
             if(isInborn) cout<<"no inbound travel";
             else cout<<"no outbound travel";
