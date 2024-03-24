@@ -3,16 +3,29 @@
 #include <sstream>
 #include <queue>
 #include <climits>
+#include <string>
+#include <functional>
+
 
 using namespace std;
 
-Graph::Graph(int bus , int tram, int sprinter, int rail) {
+Graph::Graph(const vector<pair<string, int>> &inVector) {
     stations = map<string, St_ptr>();
-    if(bus!=-1) Bus::setStopTime(bus);
-    if(tram!=-1) Tram::setStopTime(tram);
-    if(sprinter!=-1) Sprinter::setStopTime(sprinter);
-    if(rail!=-1) Rail::setStopTime(rail);
+
+    if (inVector.empty()) {
+        return;
+    }
+    for (auto &p : inVector) {
+        if(p.first == "bus") Bus::setStopTime(p.second);
+        else if(p.first == "tram") Tram::setStopTime(p.second);
+        else if(p.first == "sprinter") Sprinter::setStopTime(p.second);
+        else if(p.first == "rail") Rail::setStopTime(p.second);
+        else if(p.first == "intercity") Intercity::setChangeTime(p.second);
+        else if(p.first == "central") Central::setChangeTime(p.second);
+        else if(p.first == "stad") Stad::setChangeTime(p.second);
+    }
 }
+
 
 void Graph::addStation(string name) {
     auto it = stations.find(name);
@@ -20,7 +33,11 @@ void Graph::addStation(string name) {
 //        cout << "Station already exists" << endl;
         return;
     }
-    St_ptr sharedPtr = make_shared<Station>(name);
+    St_ptr sharedPtr;
+    auto sub_str = name.substr(0, 2);
+    if (sub_str == "IC") sharedPtr = make_shared<Intercity>(name);
+    else if (sub_str == "CS") sharedPtr = make_shared<Central>(name);
+    else sharedPtr = make_shared<Stad>(name);
     stations.insert({std::move(name), sharedPtr});
 //    cout << "Station added" << endl;
 }
@@ -32,13 +49,17 @@ void Graph::addEdge(const string &from, const string &to, int type, int duration
     auto it2 = stations.find(to);
     Tr_ptr sharedPtr;
     switch (type) {
-        case 0: sharedPtr = make_shared<Bus>(duration);
+        case 0:
+            sharedPtr = make_shared<Bus>(duration);
             break;
-        case 1: sharedPtr = make_shared<Tram>( duration);
+        case 1:
+            sharedPtr = make_shared<Tram>(duration);
             break;
-        case 2: sharedPtr = make_shared<Sprinter>(duration);
+        case 2:
+            sharedPtr = make_shared<Sprinter>(duration);
             break;
-        case 3: sharedPtr = make_shared<Rail>(duration);
+        case 3:
+            sharedPtr = make_shared<Rail>(duration);
             break;
         default:
             break;
@@ -70,7 +91,7 @@ unique_ptr<vector<string>> Graph::bfs(const string &startName, bool reverse, int
         St_ptr station = queue.front();
         queue.pop();
         pathVector_ptr->emplace_back(std::move(station->getName()));
-        const auto& connections = reverse ? station->getRevConnections() : station->getConnections();
+        const auto &connections = reverse ? station->getRevConnections() : station->getConnections();
         for (const auto &connection: connections) {
             if (visited.find(connection.first) == visited.end() && connection.second[type] != nullptr) {
                 queue.push(connection.first);
@@ -179,7 +200,7 @@ Graph::dijkstraMulti(const string &start, const vector<pair<int, int>> &startVec
 
                 if ((*arrOfDistMap)[i].find(connStName) == (*arrOfDistMap)[i].end() ||
                     (*arrOfDistMap)[i][connStName] >
-                            (*arrOfDistMap)[type][currStName] + weight) { //Check if new way is shorter
+                    (*arrOfDistMap)[type][currStName] + weight) { //Check if new way is shorter
                     (*arrOfDistMap)[i][connStName] = (*arrOfDistMap)[type][currStName] + weight;
                     priorityQueue.emplace((*arrOfDistMap)[i][connStName], connStName, i);
                 }
@@ -210,17 +231,22 @@ void Graph::viaExpress(const string &source_node, const string &target_node, con
         }
     }
     if (inputVector.empty())
-        cout<<source_node<<" and "<<transit_node<<" are not connected."<<endl; //If there is no connection from a to c
+        cout << source_node << " and " << transit_node << " are not connected."
+             << endl; //If there is no connection from a to c
     arrOfDistMap = dijkstraMulti(transit_node, inputVector); //Get all distances from c to b
-    int minvalue = INT_MAX ;
+    int minvalue = INT_MAX;
     for (auto &distMap: (*arrOfDistMap)) { //Get the smallest value of all type of transport
         auto it = distMap.find(target_node);
         if (it != distMap.end() && it->second < minvalue) {
             minvalue = it->second;
         }
     }
-    if(minvalue == INT_MAX ) cout<<transit_node<<" and "<<target_node<<" are not connected."<<endl; //If there is no connection from c to b
-    else cout<<"The shortest way from "<<source_node<<" to "<<target_node<<" via "<<transit_node<<" is "<<minvalue<<endl;
+    if (minvalue == INT_MAX)
+        cout << transit_node << " and " << target_node << " are not connected."
+             << endl; //If there is no connection from c to b
+    else
+        cout << "The shortest way from " << source_node << " to " << target_node << " via " << transit_node << " is "
+             << minvalue << endl;
 }
 
 void Graph::uniExpress(const string &source_node, const string &target_node) {
@@ -229,14 +255,13 @@ void Graph::uniExpress(const string &source_node, const string &target_node) {
         return;
 
     for (int i = 0; i < 4; i++) {
-        cout<<tran_names[i]<<": ";
+        cout << tran_names[i] << ": ";
         auto distMap = dijkstra(source_node, i);
         auto it = distMap->find(target_node);
         if (it != distMap->end()) {
-            cout<<it->second<<endl;
-        }
-        else {
-            cout<<"route unavailable"<<endl;
+            cout << it->second << endl;
+        } else {
+            cout << "route unavailable" << endl;
         }
     }
 }
@@ -247,35 +272,34 @@ void Graph::multiExpress(const string &source_node, const string &target_node) {
         return;
     auto arrOfDistMap = dijkstraMulti(source_node);
 
-    int minvalue = INT_MAX ;
+    int minvalue = INT_MAX;
     for (auto distMap: (*arrOfDistMap)) {
         if (distMap.find(target_node) != distMap.end() && distMap[target_node] < minvalue) {
             minvalue = distMap[target_node];
         }
     }
-    if(minvalue == INT_MAX ){
-        cout<<source_node<<" and "<<target_node<<" are not connected"<<endl;
+    if (minvalue == INT_MAX) {
+        cout << source_node << " and " << target_node << " are not connected" << endl;
     } else
-        cout<<"The shortest way between "<<source_node<<" and "<<target_node<<" is "<<minvalue<<endl;
+        cout << "The shortest way between " << source_node << " and " << target_node << " is " << minvalue << endl;
 
 }
 
 void Graph::outborn(const string &source_node, bool isInborn) {
     if (stations.find(source_node) == stations.end()) //Check if station exist
         return; //CHANGE!!!!!!!!!!!!!!!
-    for(int i = 0; i < 4; i++){
+    for (int i = 0; i < 4; i++) {
         auto conVector_ptr = bfs(source_node, isInborn, i);
-        cout<<tran_names[i]<<": ";
-        if(conVector_ptr->empty()){
-            if(isInborn) cout<<"no inbound travel";
-            else cout<<"no outbound travel";
-        }
-        else{
-            for( const auto& station: *conVector_ptr){
-                cout<<station<<"\t";
+        cout << tran_names[i] << ": ";
+        if (conVector_ptr->empty()) {
+            if (isInborn) cout << "no inbound travel";
+            else cout << "no outbound travel";
+        } else {
+            for (const auto &station: *conVector_ptr) {
+                cout << station << "\t";
             }
         }
-        cout<<endl;
+        cout << endl;
     }
 }
 

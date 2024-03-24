@@ -9,9 +9,7 @@ private:
     static int stopTime;
 public:
     explicit Bus (int dur) : Transport(dur) {}
-    int getType() const override {
-        return 0;
-    }
+    int getType() const override;
     int getStopTime() const override;
 
     static void setStopTime(int time);

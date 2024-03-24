@@ -2,8 +2,9 @@
 #define HW2_STATION_H
 
 #include <string>
-#include "Transport/Transport.h"
+#include "../Transport/Transport.h"
 #include <map>
+#include <utility>
 #include <vector>
 #include "memory"
 #include "set"
@@ -24,15 +25,12 @@ private:
     map<St_ptr, array<Tr_ptr, 4>> connectionsRev; // Reversion connections
 
 public:
-    static int changeTime;
 
     explicit Station(string name);
 
     void addConnection(const St_ptr &station, const Tr_ptr &transport, bool rev = false);
 
-    string getName() {
-        return name;
-    }
+    virtual string getName();
 
     stringstream printStation();
 
@@ -40,9 +38,7 @@ public:
 
     map<St_ptr, array<Tr_ptr, 4>> getRevConnections() { return connectionsRev; }
 
-    static int getChangeTime(){
-        return changeTime;
-    }
+    virtual int getChangeTime() = 0;
 
 };
 

@@ -1,11 +1,15 @@
 #ifndef HW2_GRAPH_H
 #define HW2_GRAPH_H
 
-#include "Station.h"
+#include "Station/Station.h"
 #include "Transport/Bus.h"
 #include "Transport/Tram.h"
 #include "Transport/Sprinter.h"
 #include "Transport/Rail.h"
+#include "Station/InterCity.h"
+#include "Station/Stad.h"
+#include "Station/Central.h"
+
 #include <map>
 #include <vector>
 #include <memory>
@@ -26,7 +30,7 @@ private:
 
     unique_ptr<array<map<string, int>, 4>> dijkstraMulti(const string &start, const vector<pair<int, int>> &startVector = {});
 public:
-    explicit Graph(int bus = -1, int tram = -1, int sprinter = -1, int rail = -1);
+    explicit Graph(const vector<pair<string, int>> &inVector);
 
     void addStation(string name);
 

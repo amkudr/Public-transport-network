@@ -3,16 +3,20 @@
 
 int main() {
 //    Graph graph = Graph(8,4,5,6);
-    Graph graph = Graph();
+    auto inVector = vector<pair<string, int>>();
+    inVector.emplace_back("bus",3);
+    inVector.emplace_back("tram",3);
+    inVector.emplace_back("intercity",8);
+    Graph graph = Graph(inVector);
 
-    for (char stationName = 'A'; stationName <= 'Z'; ++stationName) {
-        string station = string(1, stationName);
-        graph.addStation(station);
-    }
+//    for (char stationName = 'A'; stationName <= 'Z'; ++stationName) {
+//        string station = string(1, stationName);
+//        graph.addStation(station);
+//    }
 
     // Добавляем рёбра между станциями
-//    graph.addEdge("A", "B", 0, 5);
-//    graph.addEdge("B", "C", 0, 3);
+//    graph.addEdge("ICA", "CSA", 0, 5);
+//    graph.addEdge("CSA", "C", 0, 3);
 //    graph.addEdge("C", "D", 1, 7);
 //    graph.addEdge("D", "E", 1, 4);
 //    graph.addEdge("E", "F", 1, 6);
@@ -36,30 +40,35 @@ int main() {
 //    graph.addEdge("W", "X", 2, 18);
 //    graph.addEdge("X", "Y", 3, 19);
 //    graph.addEdge("Y", "Z", 0, 20);
-//    graph.addEdge("A", "Z", 1, 10);
+//    graph.addEdge("ICA", "Z", 1, 10);
 
     // Выполняем операции с графом
-//    graph.viaExpress("A", "M", "C"); // Путь от A до E через C
-//    graph.multiExpress("A", "J");    // Множественный кратчайший путь от A до E
+//    graph.viaExpress("ICA", "M", "C"); // Путь от A до E через C
+//    graph.multiExpress("ICA", "J");    // Множественный кратчайший путь от A до E
 //
-//    graph.uniExpress("A", "J");      // Универсальный кратчайший путь от A до E
+//    graph.uniExpress("ICA", "J");      // Универсальный кратчайший путь от A до E
 
-    graph.addEdge("A", "B", 0, 7);
-    graph.addEdge("A", "B", 1, 3);
-    graph.addEdge("A", "B", 2, 1);
-    graph.addEdge("A", "B", 3, 1);
-    graph.addEdge("B", "C", 0, 10);
-    graph.addEdge("B", "C", 1, 1);
+    graph.addEdge("ICA", "CSA", 0, 7);
+    graph.addEdge("ICA", "CSA", 1, 3);
+    graph.addEdge("ICA", "CSA", 2, 1);
+    graph.addEdge("ICA", "CSA", 3, 1);
+    graph.addEdge("CSA", "C", 0, 10);
+    graph.addEdge("CSA", "C", 1, 1);
     graph.addEdge("C", "D", 0, 5);
     graph.addEdge("C", "D", 1, 100);
-    graph.addEdge("A", "D", 3,2);
+    graph.addEdge("ICA", "D", 3,2);
     graph.addEdge("D", "C", 2,2);
 
-    graph.multiExpress("A", "C");
+    graph.multiExpress("ICA", "C");
 
-    graph.uniExpress("A", "C");
-    graph.viaExpress("B", "D", "C");
-    graph.outborn("C");
+    graph.uniExpress("ICA", "C");
+    graph.viaExpress("CSA", "D", "C");
+    graph.inborn("ICA");
+    graph.outborn("CSA");
+    cout<<endl;
+
+
+    graph.printGraph();
 //    for(const auto& station: vector){
 //        cout<<station<<"\t";
 //    }
@@ -70,20 +79,20 @@ int main() {
 
 
 
-//    graph.addEdge("A", "B", 1, 1);
-//    graph.addEdge("A", "B", 0, 3);
-//    graph.addEdge("B", "C", 1, 10);
-//    graph.addEdge("B", "C", 0, 1);
+//    graph.addEdge("ICA", "CSA", 1, 1);
+//    graph.addEdge("ICA", "CSA", 0, 3);
+//    graph.addEdge("CSA", "C", 1, 10);
+//    graph.addEdge("CSA", "C", 0, 1);
 //    graph.addEdge("C", "D", 1, 3);
-//    graph.addEdge("D", "A", 1, 4);
-//    graph.addEdge("B", "E", 1, 5);
+//    graph.addEdge("D", "ICA", 1, 4);
+//    graph.addEdge("CSA", "E", 1, 5);
 //    graph.addEdge("M", "E", 1, 6);
-//    graph.addEdge("B", "D", 1, 3);
+//    graph.addEdge("CSA", "D", 1, 3);
 //    graph.printGraph();
 //    graph.bfs("E", true);
 
 //    graph.printGraph();
-//    auto v = graph.dijkstraMulti("A", vector<pair<int, int>>());
+//    auto v = graph.dijkstraMulti("ICA", vector<pair<int, int>>());
 //    for( const auto& i:v){
 //        cout<<i.first<< " "<<i.second<<endl;
 //    }

@@ -13,3 +13,7 @@ void Bus::setStopTime(int time) {
 string Bus::getName() const {
     return "bus";
 }
+
+int Bus::getType() const {
+    return 0;
+}

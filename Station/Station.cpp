@@ -5,10 +5,7 @@
 
 using namespace std;
 
-int Station::changeTime = 3;
-
-Station::Station(string name) {
-    this->name = std::move(name);
+Station::Station(string name) : name(std::move(name)) {
     connections = map<St_ptr, array<Tr_ptr, 4>>();
 }
 
@@ -28,18 +25,25 @@ void Station::addConnection(const shared_ptr<Station> &station, const shared_ptr
 stringstream Station::printStation() {
     stringstream ss;
     Tr_ptr tran;
-    ss << "Station: " << name << endl << "Connections: \n";
+    ss << "Station: " << name << endl<<"Connections: \n";
     for (const auto &connect: connections) {
-        ss << connect.first->getName() <<" ";
+        ss << connect.first->getName() <<" by: ";
         for (int i = 0; i < 4; i++) {
             tran = connect.second[i];
             if (tran != nullptr) {
-                ss << "by type " <<tran->getType() << " with Stop time "
-                   << tran->getStopTime() << " Duration " << tran->getDuration() << endl;
+                ss<<tran->getName()<<"-"<<tran->getDuration()<<" ";
             }
         }
+        ss<<endl;
+
+
     }
+    ss<<endl;
     return ss;
+}
+
+string Station::getName() {
+    return name;
 }
 
 
