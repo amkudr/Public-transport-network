@@ -12,8 +12,15 @@ int main() {
     graph.addEdge("C", "D", 0, 5);
     graph.addEdge("C", "D", 1, 100);
 
-    cout<<graph.fromAtoBMulti("A","C")<<endl;
-    cout<<graph.fromAtoBSingle("A","C")<<endl;
+    graph.multiExpress("A", "C");
+
+    graph.uniExpress("A", "C");
+    graph.viaExpress("B", "D", "C");
+    graph.inborn("C");
+//    for(const auto& station: vector){
+//        cout<<station<<"\t";
+//    }
+//
 
 
 
@@ -30,13 +37,13 @@ int main() {
 //    graph.addEdge("M", "E", 1, 6);
 //    graph.addEdge("B", "D", 1, 3);
 //    graph.printGraph();
-//    graph.bfdPrint("E", true);
+//    graph.bfs("E", true);
 
 //    graph.printGraph();
 //    auto v = graph.dijkstraMulti("A", vector<pair<int, int>>());
 //    for( const auto& i:v){
 //        cout<<i.first<< " "<<i.second<<endl;
 //    }
-//    graph.bfdPrint("E", true);
+//    graph.bfs("E", true);
     return 0;
 }
