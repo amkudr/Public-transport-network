@@ -11,8 +11,8 @@ Station::Station(string name) : name(std::move(name)) {
 
 void Station::addConnection(const shared_ptr<Station> &station, const shared_ptr<Transport> &transport, bool rev) {
     auto &currConn = rev ? connectionsRev : connections;
-    auto it = currConn.find(station); //find station in connectionsOld
-    if (it != currConn.end()) {//if station is in connectionsOld
+    auto it = currConn.find(station); //find station in connections
+    if (it != currConn.end()) {//if station is in connections
         auto &currTr = it->second[transport->getType()];
         if (currTr == nullptr || currTr < transport) currTr = transport;
 

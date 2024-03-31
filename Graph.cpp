@@ -9,20 +9,23 @@
 
 using namespace std;
 
-Graph::Graph(const vector<pair<string, int>> &inVector) {
+Graph::Graph() {
     stations = map<string, St_ptr>();
+}
 
+void Graph::setConfig(const vector<pair<string, int>> &inVector) {
     if (inVector.empty()) {
         return;
     }
-    for (auto &p : inVector) {
-        if(p.first == "bus") Bus::setStopTime(p.second);
-        else if(p.first == "tram") Tram::setStopTime(p.second);
-        else if(p.first == "sprinter") Sprinter::setStopTime(p.second);
-        else if(p.first == "rail") Rail::setStopTime(p.second);
-        else if(p.first == "intercity") Intercity::setChangeTime(p.second);
-        else if(p.first == "central") Central::setChangeTime(p.second);
-        else if(p.first == "stad") Stad::setChangeTime(p.second);
+    for (auto &p: inVector) {
+        if (p.second<=0) continue;
+        if (p.first == "bus") Bus::setStopTime(p.second);
+        else if (p.first == "tram") Tram::setStopTime(p.second);
+        else if (p.first == "sprinter") Sprinter::setStopTime(p.second);
+        else if (p.first == "rail") Rail::setStopTime(p.second);
+        else if (p.first == "intercity") Intercity::setChangeTime(p.second);
+        else if (p.first == "central") Central::setChangeTime(p.second);
+        else if (p.first == "stad") Stad::setChangeTime(p.second);
     }
 }
 
@@ -69,9 +72,11 @@ void Graph::addEdge(const string &from, const string &to, int type, int duration
     it2->second->addConnection(it->second, sharedPtr, true);
 }
 
-void Graph::printGraph() {
+string Graph::print() {
+    stringstream ss;
     for (const auto &station: stations)
-        cout << station.second->printStation().str();
+        ss << station.second->printStation().str();
+    return ss.str();
 }
 
 unique_ptr<vector<string>> Graph::bfs(const string &startName, bool reverse, int type) {
@@ -118,10 +123,6 @@ unique_ptr<map<string, int>> Graph::dijkstra(const string &start, int type) {
     while (!priorityQueue.empty()) {
         string currStName = priorityQueue.top().second;
         priorityQueue.pop();
-
-        if ((*distMap)[currStName] < priorityQueue.top().first) {
-            continue;
-        }
 
         auto currSt_ptr = stations[currStName];
 
@@ -285,7 +286,7 @@ void Graph::multiExpress(const string &source_node, const string &target_node) {
 
 }
 
-void Graph::outborn(const string &source_node, bool isInborn) {
+void Graph::outbound(const string &source_node, bool isInborn) {
     if (stations.find(source_node) == stations.end()) //Check if station exist
         return; //CHANGE!!!!!!!!!!!!!!!
     for (int i = 0; i < 4; i++) {
@@ -303,7 +304,7 @@ void Graph::outborn(const string &source_node, bool isInborn) {
     }
 }
 
-void Graph::inborn(const string &source_node) {
-    outborn(source_node, true);
+void Graph::inbound(const string &source_node) {
+    outbound(source_node, true);
 }
 

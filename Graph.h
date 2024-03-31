@@ -30,17 +30,19 @@ private:
 
     unique_ptr<array<map<string, int>, 4>> dijkstraMulti(const string &start, const vector<pair<int, int>> &startVector = {});
 public:
-    explicit Graph(const vector<pair<string, int>> &inVector);
+    explicit Graph();
 
     void addStation(string name);
 
     void addEdge(const string &from, const string &to, int type, int duration);
 
-    void printGraph();
+    static static void setConfig(const vector<pair<string, int>> &inVector);
 
-    void outborn(const string &source_node, bool isInborn = false);
+    string print();
 
-    void inborn(const string &source_node);
+    void outbound(const string &source_node, bool isInborn = false);
+
+    void inbound(const string &source_node);
 
     void uniExpress(const string &source_node, const string &target_node);
 
