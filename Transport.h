@@ -13,6 +13,14 @@ public:
 
     explicit Transport(int dur) : dur(dur) {};
 
+    Transport(const Transport &other)  = default;
+
+    Transport(Transport &&other)  noexcept : dur(other.dur) {}
+
+    Transport &operator=(const Transport &other);
+
+    Transport &operator=(Transport &&other)  noexcept;
+
     bool operator<(const Transport &other) const;
 
     int getDuration() const {

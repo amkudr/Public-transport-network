@@ -49,8 +49,8 @@ cmake_ninja_workdir = C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/cmake-build
 
 build cmake_object_order_depends_target_HW2: phony || CMakeFiles/HW2.dir
 
-build CMakeFiles/HW2.dir/main.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/main.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\main.cpp.obj.d
+build CMakeFiles/HW2.dir/netOmsterdam.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/netOmsterdam.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\netOmsterdam.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
   OBJECT_FILE_DIR = CMakeFiles\HW2.dir
@@ -61,59 +61,59 @@ build CMakeFiles/HW2.dir/Graph.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Us
   OBJECT_DIR = CMakeFiles\HW2.dir
   OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
-build CMakeFiles/HW2.dir/Station/Station.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Station/Station.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\Station\Station.cpp.obj.d
+build CMakeFiles/HW2.dir/Station.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Station.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\Station.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
-  OBJECT_FILE_DIR = CMakeFiles\HW2.dir\Station
+  OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
-build CMakeFiles/HW2.dir/Transport/Transport.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Transport/Transport.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\Transport\Transport.cpp.obj.d
+build CMakeFiles/HW2.dir/Transport.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Transport.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\Transport.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
-  OBJECT_FILE_DIR = CMakeFiles\HW2.dir\Transport
+  OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
-build CMakeFiles/HW2.dir/Transport/Bus.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Transport/Bus.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\Transport\Bus.cpp.obj.d
+build CMakeFiles/HW2.dir/Bus.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Bus.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\Bus.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
-  OBJECT_FILE_DIR = CMakeFiles\HW2.dir\Transport
+  OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
-build CMakeFiles/HW2.dir/Transport/Sprinter.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Transport/Sprinter.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\Transport\Sprinter.cpp.obj.d
+build CMakeFiles/HW2.dir/Sprinter.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Sprinter.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\Sprinter.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
-  OBJECT_FILE_DIR = CMakeFiles\HW2.dir\Transport
+  OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
-build CMakeFiles/HW2.dir/Transport/Tram.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Transport/Tram.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\Transport\Tram.cpp.obj.d
+build CMakeFiles/HW2.dir/Tram.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Tram.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\Tram.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
-  OBJECT_FILE_DIR = CMakeFiles\HW2.dir\Transport
+  OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
-build CMakeFiles/HW2.dir/Transport/Rail.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Transport/Rail.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\Transport\Rail.cpp.obj.d
+build CMakeFiles/HW2.dir/Rail.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Rail.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\Rail.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
-  OBJECT_FILE_DIR = CMakeFiles\HW2.dir\Transport
+  OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
-build CMakeFiles/HW2.dir/Station/Intercity.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Station/Intercity.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\Station\Intercity.cpp.obj.d
+build CMakeFiles/HW2.dir/Intercity.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Intercity.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\Intercity.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
-  OBJECT_FILE_DIR = CMakeFiles\HW2.dir\Station
+  OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
-build CMakeFiles/HW2.dir/Station/Stad.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Station/Stad.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\Station\Stad.cpp.obj.d
+build CMakeFiles/HW2.dir/Stad.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Stad.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\Stad.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
-  OBJECT_FILE_DIR = CMakeFiles\HW2.dir\Station
+  OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
-build CMakeFiles/HW2.dir/Station/Central.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Station/Central.cpp || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles\HW2.dir\Station\Central.cpp.obj.d
+build CMakeFiles/HW2.dir/Central.cpp.obj: CXX_COMPILER__HW2_unscanned_Debug C$:/Users/Anton/Documents/C$ lab/C++/ATOOP/HW2/Central.cpp || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles\HW2.dir\Central.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW2.dir
-  OBJECT_FILE_DIR = CMakeFiles\HW2.dir\Station
+  OBJECT_FILE_DIR = CMakeFiles\HW2.dir
 
 
 # =============================================================================
@@ -123,7 +123,7 @@ build CMakeFiles/HW2.dir/Station/Central.cpp.obj: CXX_COMPILER__HW2_unscanned_De
 #############################################
 # Link the executable HW2.exe
 
-build HW2.exe: CXX_EXECUTABLE_LINKER__HW2_Debug CMakeFiles/HW2.dir/main.cpp.obj CMakeFiles/HW2.dir/Graph.cpp.obj CMakeFiles/HW2.dir/Station/Station.cpp.obj CMakeFiles/HW2.dir/Transport/Transport.cpp.obj CMakeFiles/HW2.dir/Transport/Bus.cpp.obj CMakeFiles/HW2.dir/Transport/Sprinter.cpp.obj CMakeFiles/HW2.dir/Transport/Tram.cpp.obj CMakeFiles/HW2.dir/Transport/Rail.cpp.obj CMakeFiles/HW2.dir/Station/Intercity.cpp.obj CMakeFiles/HW2.dir/Station/Stad.cpp.obj CMakeFiles/HW2.dir/Station/Central.cpp.obj
+build HW2.exe: CXX_EXECUTABLE_LINKER__HW2_Debug CMakeFiles/HW2.dir/netOmsterdam.cpp.obj CMakeFiles/HW2.dir/Graph.cpp.obj CMakeFiles/HW2.dir/Station.cpp.obj CMakeFiles/HW2.dir/Transport.cpp.obj CMakeFiles/HW2.dir/Bus.cpp.obj CMakeFiles/HW2.dir/Sprinter.cpp.obj CMakeFiles/HW2.dir/Tram.cpp.obj CMakeFiles/HW2.dir/Rail.cpp.obj CMakeFiles/HW2.dir/Intercity.cpp.obj CMakeFiles/HW2.dir/Stad.cpp.obj CMakeFiles/HW2.dir/Central.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\HW2.dir

@@ -18,7 +18,7 @@ void Graph::setConfig(const vector<pair<string, int>> &inVector) {
         return;
     }
     for (auto &p: inVector) {
-        if (p.second<=0) continue;
+        if (p.second<=0) throw invalid_argument("config time is negative/zero");
         if (p.first == "bus") Bus::setStopTime(p.second);
         else if (p.first == "tram") Tram::setStopTime(p.second);
         else if (p.first == "sprinter") Sprinter::setStopTime(p.second);
@@ -31,9 +31,10 @@ void Graph::setConfig(const vector<pair<string, int>> &inVector) {
 
 
 void Graph::addStation(string name) {
+    if (name.size()>16 || name.find(' ') != string::npos) throw runtime_error("Invalid station name");
+
     auto it = stations.find(name);
     if (it != stations.end()) {
-//        cout << "Station already exists" << endl;
         return;
     }
     St_ptr sharedPtr;
@@ -42,10 +43,11 @@ void Graph::addStation(string name) {
     else if (sub_str == "CS") sharedPtr = make_shared<Central>(name);
     else sharedPtr = make_shared<Stad>(name);
     stations.insert({std::move(name), sharedPtr});
-//    cout << "Station added" << endl;
 }
 
 void Graph::addEdge(const string &from, const string &to, int type, int duration) {
+    if(duration<=0) throw invalid_argument("Duration between" + from + " and " + to + "is negative/zero");
+    if(type < 0 || type > 3) throw invalid_argument("Invalid type");
     addStation(from);
     addStation(to);
     auto it = stations.find(from);
@@ -81,10 +83,6 @@ string Graph::print() {
 
 unique_ptr<vector<string>> Graph::bfs(const string &startName, bool reverse, int type) {
     auto it = stations.find(startName);
-    if (it == stations.end()) {
-        cout << "Station not found" << endl;
-        return {};
-    }
 
     St_ptr start = it->second;
     set<St_ptr> visited;
@@ -111,9 +109,6 @@ unique_ptr<vector<string>> Graph::bfs(const string &startName, bool reverse, int
 typedef pair<int, string> iPair;
 
 unique_ptr<map<string, int>> Graph::dijkstra(const string &start, int type) {
-    if (stations.find(start) == stations.end() || type < 0 || type >= 5) {
-        return nullptr;
-    }
 
     auto distMap = unique_ptr<map<string, int>>(new map<string, int>());
     priority_queue<iPair, vector<iPair>, greater<iPair>> priorityQueue;
@@ -151,14 +146,11 @@ unique_ptr<map<string, int>> Graph::dijkstra(const string &start, int type) {
     return distMap;
 }
 
+//Extended Dijkstra that accepts multiple transport types for each station
 typedef tuple<int, string, int> iTriple; //Duration, Vertex Name, Type of transport
 unique_ptr<array<map<string, int>, 4>>
 Graph::dijkstraMulti(const string &start, const vector<pair<int, int>> &startVector) {
-    auto it = stations.find(start);
-    if (it == stations.end()) {    //Check if start inside
 
-        return {};
-    }
     auto arrOfDistMap = std::unique_ptr<std::array<std::map<std::string, int>, 4>>(
             new std::array<std::map<std::string, int>, 4>()); //Array of all 4 type of the transport, map<NameVertex, distance>
     priority_queue<iTriple, vector<iTriple>, greater<iTriple>> priorityQueue; //queue to keep vertexes by algorithm
@@ -215,11 +207,14 @@ Graph::dijkstraMulti(const string &start, const vector<pair<int, int>> &startVec
 }
 
 
-void Graph::viaExpress(const string &source_node, const string &target_node, const string &transit_node) {
-    if (stations.find(source_node) == stations.end() || stations.find(target_node) == stations.end() ||
-        //Check if stations exist
-        stations.find(transit_node) == stations.end())
-        return;
+void Graph::viaExpress(const string &source_node, const string &transit_node, const string &target_node) {
+    if (stations.find(source_node) == stations.end()) {
+        throw invalid_argument(source_node + " does not exist in the current network");
+    } else if (stations.find(target_node) == stations.end()) {
+        throw invalid_argument(target_node + " does not exist in the current network");
+    } else if (stations.find(transit_node) == stations.end()) {
+        throw invalid_argument(transit_node + " does not exist in the current network");
+    }
 
     auto arrOfDistMap = dijkstraMulti(source_node); //Get all distances from a
     vector<pair<int, int>> inputVector; //Vector for advanced algorithm
@@ -251,9 +246,12 @@ void Graph::viaExpress(const string &source_node, const string &target_node, con
 }
 
 void Graph::uniExpress(const string &source_node, const string &target_node) {
-    if (stations.find(source_node) == stations.end() ||
-        stations.find(target_node) == stations.end()) //Check if stations exist
-        return;
+    if (stations.find(source_node) == stations.end()) {
+        throw invalid_argument(source_node + " does not exist in the current network");
+    } else {
+        if (stations.find(target_node) == stations.end()) //Check if stations exist
+            throw invalid_argument(target_node + " does not exist in the current network");
+    }
 
     for (int i = 0; i < 4; i++) {
         cout << tran_names[i] << ": ";
@@ -268,13 +266,16 @@ void Graph::uniExpress(const string &source_node, const string &target_node) {
 }
 
 void Graph::multiExpress(const string &source_node, const string &target_node) {
-    if (stations.find(source_node) == stations.end() ||
-        stations.find(target_node) == stations.end()) //Check if stations exist
-        return;
-    auto arrOfDistMap = dijkstraMulti(source_node);
+    if (stations.find(source_node) == stations.end()) {
+        throw invalid_argument(source_node + " does not exist in the current network");
+    } else {
+        if (stations.find(target_node) == stations.end()) //Check if stations exist
+            throw invalid_argument(target_node + " does not exist in the current network");
+    }
+    auto arrOfDistMap = dijkstraMulti(source_node); //use dijkstraMulti to get all distances
 
     int minvalue = INT_MAX;
-    for (auto distMap: (*arrOfDistMap)) {
+    for (auto distMap: (*arrOfDistMap)) { //Get the smallest value of all type of transport
         if (distMap.find(target_node) != distMap.end() && distMap[target_node] < minvalue) {
             minvalue = distMap[target_node];
         }
@@ -287,17 +288,16 @@ void Graph::multiExpress(const string &source_node, const string &target_node) {
 }
 
 void Graph::outbound(const string &source_node, bool isInborn) {
-    if (stations.find(source_node) == stations.end()) //Check if station exist
-        return; //CHANGE!!!!!!!!!!!!!!!
+    if (stations.find(source_node) == stations.end()) throw invalid_argument(source_node + " does not exist in the current network");
     for (int i = 0; i < 4; i++) {
-        auto conVector_ptr = bfs(source_node, isInborn, i);
+        auto conVector_ptr = bfs(source_node, isInborn, i); //Use bfs for all type of transport
         cout << tran_names[i] << ": ";
         if (conVector_ptr->empty()) {
             if (isInborn) cout << "no inbound travel";
             else cout << "no outbound travel";
         } else {
             for (const auto &station: *conVector_ptr) {
-                cout << station << "\t";
+                cout << station << '\t';
             }
         }
         cout << endl;

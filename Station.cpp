@@ -35,8 +35,6 @@ stringstream Station::printStation() {
             }
         }
         ss<<endl;
-
-
     }
     ss<<endl;
     return ss;

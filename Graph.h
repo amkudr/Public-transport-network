@@ -1,14 +1,14 @@
 #ifndef HW2_GRAPH_H
 #define HW2_GRAPH_H
 
-#include "Station/Station.h"
-#include "Transport/Bus.h"
-#include "Transport/Tram.h"
-#include "Transport/Sprinter.h"
-#include "Transport/Rail.h"
-#include "Station/InterCity.h"
-#include "Station/Stad.h"
-#include "Station/Central.h"
+#include "Station.h"
+#include "Bus.h"
+#include "Tram.h"
+#include "Sprinter.h"
+#include "Rail.h"
+#include "Intercity.h"
+#include "Stad.h"
+#include "Central.h"
 
 #include <map>
 #include <vector>
@@ -36,7 +36,7 @@ public:
 
     void addEdge(const string &from, const string &to, int type, int duration);
 
-    static static void setConfig(const vector<pair<string, int>> &inVector);
+    static void setConfig(const vector<pair<string, int>> &inVector);
 
     string print();
 
@@ -48,7 +48,7 @@ public:
 
     void multiExpress(const string &source_node, const string &target_node);
 
-    void viaExpress(const string &source_node, const string &target_node, const string &transit_node);
+    void viaExpress(const string &source_node, const string &transit_node, const string &target_node);
 
 
 };

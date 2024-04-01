@@ -2,7 +2,7 @@
 #define HW2_STATION_H
 
 #include <string>
-#include "../Transport/Transport.h"
+#include "Transport.h"
 #include <map>
 #include <utility>
 #include <vector>

@@ -3,24 +3,24 @@ project(HW2)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(HW2 main.cpp
+add_executable(HW2 netOmsterdam.cpp
         Graph.cpp
         Graph.h
-        Station/Station.cpp
-        Station/Station.h
-        Transport/Transport.cpp
-        Transport/Transport.h
-        Transport/Bus.h
-        Transport/Tram.h
-        Transport/Sprinter.h
-        Transport/Rail.h
-        Transport/Bus.cpp
-        Transport/Sprinter.cpp
-        Transport/Tram.cpp
-        Transport/Rail.cpp
-        Station/Intercity.cpp
-        Station/Intercity.h
-        Station/Stad.cpp
-        Station/Stad.h
-        Station/Central.cpp
-        Station/Central.h)
+        Station.cpp
+        Station.h
+        Transport.cpp
+        Transport.h
+        Bus.h
+        Tram.h
+        Sprinter.h
+        Rail.h
+        Bus.cpp
+        Sprinter.cpp
+        Tram.cpp
+        Rail.cpp
+        Intercity.cpp
+        Intercity.h
+        Stad.cpp
+        Stad.h
+        Central.cpp
+        Central.h)
