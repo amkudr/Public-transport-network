@@ -1,4 +1,5 @@
-ToolSet: 5.0 (local)@C:\MinGW
-Options: 
+ToolSet: 17.0 (local)@C:\Program Files\Microsoft Visual Studio\2022\Professional
+Ninja: 1.12.0@C:\Users\Anton\AppData\Local\Programs\CLion\bin\ninja\win\x64\ninja.exe
+Options: msvc.arch=amd64
 
 Options:-DCMAKE_MAKE_PROGRAM=C:/Users/Anton/AppData/Local/Programs/CLion/bin/ninja/win/x64/ninja.exe

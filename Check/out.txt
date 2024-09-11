@@ -1,0 +1,56 @@
+Station: Amstel
+Connections: 
+Leidseplein by: tram-5 
+
+Station: CScentraal
+Connections: 
+Prinsengracht by: tram-4 
+
+Station: CSnoord
+Connections: 
+CSzuid by: bus-36 
+CSoost by: rail-17 
+CSwest by: rail-15 
+
+Station: CSoost
+Connections: 
+CSzuid by: rail-9 
+CSnoord by: rail-16 
+CSwest by: sprinter-12 
+
+Station: CSwest
+Connections: 
+CSzuid by: rail-7 
+CSnoord by: rail-14 
+CSoost by: sprinter-12 
+
+Station: CSzuid
+Connections: 
+CSnoord by: bus-34 
+CSoost by: rail-8 
+CSwest by: rail-6 
+
+Station: Concertgebouw
+Connections: 
+Herengracht by: tram-7 
+
+Station: Herengracht
+Connections: 
+CScentraal by: tram-8 
+
+Station: Hooigracht
+Connections: 
+Westzijde by: tram-4 
+
+Station: Leidseplein
+Connections: 
+Concertgebouw by: tram-4 
+
+Station: Prinsengracht
+Connections: 
+Hooigracht by: tram-3 
+
+Station: Westzijde
+Connections: 
+Amstel by: tram-3 
+
