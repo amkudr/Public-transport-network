@@ -30,5 +30,48 @@ This project simulates a public transport network in a metropolitan area using *
 After compiling, the program is run through the terminal. It accepts multiple input files describing the transport network, with options for configuration and output files.
 
 ### Example Usage:
-```bash
+```C++
 $ ./netOmsterdam -i <infile1> [<infile2> <infile3> ...] [-c <config_file>] [-o <outfile>]
+```
+### Input Files:
+Each input file should describe routes between stations using the format:
+```C++
+<source_node> <TAB> <target_node> <TAB> <duration>
+```
+Example Input File:
+```C++
+Westzijde    Prinsengracht    10
+RAI          CSzuid           20
+```
+##User Interaction
+The program supports several commands for interacting with the network:
+
+###Loading New Data:
+```C++
+load <filename>
+```
+## User Commands (Terminal Interaction)
+
+Once the program is running, it supports the following user commands through terminal input:
+
+**Load Network Data**: Load additional network data from a file. ```load <filename> ```
+
+**Outbound Query**: List all stations reachable from a given station. ```outbound <station> ```
+
+**Inbound Query**: List all stations that can reach a given station. ```inbound <station> ```
+
+**Shortest Path**: Calculate the shortest travel time between two stations. ```uniExpress <source_station> <destination_station> ```
+
+**Shortest Path with Transit**: Calculate the shortest path with transit between two stations. ```multiExpress <source_station> <destination_station> ```
+
+**Via Query**: Find the shortest path between two stations that passes through an intermediate station. ```viaExpress <source_station> <transit_station> <destination_station> ```
+
+## Output File
+
+Upon receiving certain commands, such as printing the network, the program will write the output to the specified file or to the default `output.dat` file. The format of the output is customizable and will be generated based on the current state of the network.
+
+## Compilation
+
+To ensure compatibility with the server, the code must be compiled using the following flags:
+
+```g++ -std=c++11 -o netOmsterdam main.cpp graph.cpp queries.cpp ```
